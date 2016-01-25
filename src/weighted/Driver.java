@@ -25,7 +25,7 @@ public class Driver {
 
         System.out.println(graph);
 
-//        GraphUtilities.Dijkstra(graph, graph.getVertex("3"));
+        GraphUtilities.Dijkstra(graph, graph.getVertex("3"));
         GraphUtilities.BelmanFord(graph, graph.getVertex("3"));
     }
 }

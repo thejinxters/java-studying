@@ -111,32 +111,3 @@ class Edge {
         return weight;
     }
 }
-
-class VertexCostComparator extends Vertex implements Comparator<VertexCostComparator>{
-
-    private double cost;
-
-    public VertexCostComparator() {
-        super("");
-        cost = Double.POSITIVE_INFINITY;
-    }
-    public VertexCostComparator(String name) {
-        super(name);
-        cost = Double.POSITIVE_INFINITY;
-    }
-
-    public void setCost(double cost){
-        this.cost = cost;
-    }
-
-    public double getCost(){
-        return cost;
-    }
-
-    @Override
-    public int compare(VertexCostComparator o1, VertexCostComparator o2) {
-        if (o1.cost < o2.cost) return -1;
-        if (o1.cost > o2.cost) return 1;
-        return 0;
-    }
-}

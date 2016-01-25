@@ -46,27 +46,26 @@ public class GraphUtilities {
     public static void Dijkstra(Graph graph, Vertex source){
         Collection<Vertex> vertices = graph.getVertices();
         int numberOfVertices = vertices.size();
-        PriorityQueue<VertexCostComparator> queue = new PriorityQueue<>(numberOfVertices, new VertexCostComparator());
-        HashMap<String, VertexCostComparator> map = new HashMap<>();
-        HashMap<String, Vertex> origMap = new HashMap<>();
+        PriorityQueue<DHelper> queue = new PriorityQueue<>(numberOfVertices, new DHelper());
+        HashMap<String, DHelper> map = new HashMap<>();
+
         // Initialize queue with all of the vertices
         for (Vertex v: vertices){
-            VertexCostComparator vertex = new VertexCostComparator(v.getName());
+            DHelper vertex = new DHelper(v);
             if (v.getName().equals(source.getName())){
                 vertex.setCost(0);
             }
             queue.add(vertex);
-            map.put(vertex.getName(), vertex);
-            origMap.put(v.getName(), v);
+            map.put(vertex.getVertex().getName(), vertex);
         }
 
         while (!queue.isEmpty()){
-            VertexCostComparator current = queue.remove();
+            DHelper current = queue.remove();
             double dist = current.getCost();
-            for (Edge e : origMap.get(current.getName()).getEdges()){
+            for (Edge e : current.getVertex().getEdges()){
                 String name = e.getTarget().getName();
                 double weight = e.getWeight();
-                VertexCostComparator vertex = map.get(name);
+                DHelper vertex = map.get(name);
                 double new_dist = weight + dist;
                 if (new_dist < vertex.getCost()) {
                     queue.remove(vertex);
@@ -77,8 +76,8 @@ public class GraphUtilities {
             }
         }
 
-        for (VertexCostComparator v : map.values()){
-            System.out.println(source + " to " + v + " with cost " + v.getCost());
+        for (DHelper v : map.values()){
+            System.out.println(source + " to " + v.getVertex() + " with cost " + v.getCost());
         }
     }
 
@@ -130,7 +129,7 @@ public class GraphUtilities {
         for(BFHelper current: distances.values()){
             System.out.println("Vertex "+current.getVertex()+" with distance "+current.getDistance());
             BFHelper cursor = current;
-            System.out.print(current.getVertex());
+            System.out.print("Path: "+current.getVertex());
             while(cursor.getPrev() != null){
                 System.out.print(" " + cursor.getPrev().getVertex());
                 cursor = cursor.getPrev();
@@ -169,5 +168,40 @@ class BFHelper {
     }
     public BFHelper getPrev(){
         return prev;
+    }
+}
+
+class DHelper implements Comparator<DHelper>{
+    private Vertex vertex;
+    private double cost;
+
+    public DHelper() {
+        this.vertex = null;
+        cost = Double.POSITIVE_INFINITY;
+    }
+
+
+    public DHelper(Vertex vertex) {
+        this.vertex = vertex;
+        cost = Double.POSITIVE_INFINITY;
+    }
+
+    public void setCost(double cost){
+        this.cost = cost;
+    }
+
+    public double getCost(){
+        return cost;
+    }
+
+    public Vertex getVertex(){
+        return vertex;
+    }
+
+    @Override
+    public int compare(DHelper o1, DHelper o2) {
+        if (o1.cost < o2.cost) return -1;
+        if (o1.cost > o2.cost) return 1;
+        return 0;
     }
 }
