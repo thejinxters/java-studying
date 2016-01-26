@@ -1,5 +1,7 @@
 package weighted;
 
+import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
+
 /**
  * Created by jinxters on 1/20/16.
  */
@@ -23,9 +25,13 @@ public class Driver {
         graph.addEdge("6", "0", 0.58);
         graph.addEdge("6", "4", 0.93);
 
-        System.out.println(graph);
+//        System.out.println(graph);
+        GraphUtilities.Tarjan(graph);
+//        GraphUtilities.Dijkstra(graph, graph.getVertex("3"));
+//        GraphUtilities.BelmanFord(graph, graph.getVertex("3"));
 
-        GraphUtilities.Dijkstra(graph, graph.getVertex("3"));
-        GraphUtilities.BelmanFord(graph, graph.getVertex("3"));
+        Vertex dfs = GraphUtilities.BFS(graph.getVertex("3"), "4");
+        System.out.println("");
+        System.out.println(dfs);
     }
 }
